@@ -53,21 +53,52 @@ class App1 {
     sqrtIter(1.0)
   }
 
-
-  def sum(f: Int => Int, a: Int, b: Int): Int = {
-    if (a > b) 0 else f(a) + sum(f, a + 1, b)
+  /**
+   * Exercise 1
+   */
+  def pascal(c: Int, r: Int): Int = {
+    if (c == 0 || c == r) 1
+    else pascal(c, r - 1) + pascal(c - 1, r - 1)
   }
 
-  def sum2(f: Int => Int, a: Int, b: Int): Int = {
+
+  /**
+   * Exercise 2
+   */
+  def balance(chars: List[Char]): Boolean = {
     @tailrec
-    def tailSum(a: Int, acc: Int): Int = {
-      if (a > b) acc else tailSum(a + 1, acc + f(a))
+    def calc(chars: List[Char], bal: Int): Int = {
+      if (chars.isEmpty || bal < 0) bal
+      else {
+        calc(chars.tail,
+          chars.head match {
+            case '(' => bal + 1
+            case ')' => bal - 1
+            case _ => bal
+          })
+      }
     }
-    tailSum(a, 0)
+    calc(chars, 0) == 0
   }
 
-  def sumInts(a: Int, b: Int) = sum2(x => x, a, b)
 
-  def sumCubes(a: Int, b: Int) = sum2(x => x * x * x, a, b)
-
+  /**
+   * Exercise 3
+   */
+  def countChange(money: Int, coins: List[Int]): Int = {
+    def count(m: Int, n: Int): Int = {
+      // If n is 0 then there is 1 solution (do not include any coin)
+      if (n == 0) 1
+      else
+      // If n is less than 0 then no solution exists
+      if (n < 0) 0
+      // If there are no coins and n is greater than 0, then no solution exist
+      else
+      if (m <= 0 && n >= 1) 0
+      // count is sum of solutions (i) including S[m-1] (ii) excluding S[m-1]
+      else
+        count(m - 1, n) + count(m, n - coins(m - 1))
+    }
+    count(coins.size, money)
+  }
 }
